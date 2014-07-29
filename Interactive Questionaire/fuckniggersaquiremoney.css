@@ -1,0 +1,9 @@
+.Score {
+    width: 50px;
+    border: 5px solid gray;
+    height: 50px;
+    background-color: #5355ff;
+}
+body {
+    background-color: #7fff8
+}
