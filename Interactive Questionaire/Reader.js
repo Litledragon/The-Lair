@@ -1,10 +1,7 @@
 /**
  * Created by LilDragon on 11/6/14.
  */
-var read_Question=function(Question) {
 
-    }
-;
 //Scoping variable _Questions will stop any clash/overcrowding with window properties
 
 var _Questions = {
@@ -16,6 +13,15 @@ var _Total_Score = 0;
 
 //Choice picked global
 var _Choice_selected = "";
+
+// Need a variable to keep track of the number of questions created. This can track each one answered and therefore keep it on screen...
+var QuestionNumber= 0;
+
+// Also need a variable to show the end
+var end = false;
+
+// next Question Temporary, Input first question here
+var _nextQuestion = 'fuck';
 
 //check
 
@@ -31,9 +37,6 @@ function _Question (question_text,number_of_answers,_Identifier) {
     this.identifier=_Identifier;
     this.question_text= question_text;
     this.number_of_choices=number_of_answers;
-    for (var i=0; i<number_of_answers; i++) {
-        this['choice'+i] = [i,"nigger",0,"","You a dumb bitch"];
-    }
 }
 
 //quickread is a debugging function that will list everything in a question_text
@@ -72,6 +75,61 @@ var _Choose_Choice = function (identifier,choice) {
 
 };
 
+// The following functions return stuff as strings that are useful
+var return_Question_as_String = function(_signature) {
+    return _Questions[_signature]['question_text'];
+};
+
+var return_Question_NumberofChoices=function(Question,choice){
+    return _Questions[Question].number_of_choices;
+};
+
+var return_text_Choice_Number=function(Question,choice) {
+        return _Questions[Question]['choice'+choice][1];
+    };
+
+var return_remark_Choice_Number=function(Question,choice){
+    return _Questions[Question]['choice'+choice][4];
+};
+
+var return_link_Choice_Number=function(Question,choice){
+    return _Questions[Question]['choice'+choice][3];
+};
+
+var return_score_Choice_Number=function(Question,choice){
+    return _Questions[Question]['choice'+choice][2];
+};
+
+
+
+
+// HTML
+
+//Create Question
+var _Create_HTML_Question = function () {
+    var area = document.createElement("div");
+    var node = document.createTextNode("");
+    area.appendChild(node);
+    area.className="QuestionArea";
+    area.id="Question"+QuestionNumber;
+    var element = document.getElementById("main");
+    element.appendChild(area);
+    var thingy = document.createElement("div");
+    var addtothingy = document.createTextNode(return_Question_as_String(_nextQuestion));
+    thingy.appendChild(addtothingy);
+    thingy.className = "Question";
+    thingy.id = return_Question(_nextQuestion);
+    area.appendChild(thingy);
+    for (var i=1;i<20;i++) {
+        var added = document.createElement("div");
+        var add = document.createTextNode(return_text_Choice_Number(_nextQuestion, i));
+        added.appendChild(add);
+        added.className = "Choice";
+        added.id = "Choice"+i+"_of_" + QuestionNumber;
+        area.appendChild(added);
+    }
+};
+
 
 /* test */
 
@@ -94,3 +152,10 @@ console.log(return_Question('fuck'));
 
 console.log(_Choose_Choice('niggers',1));
 
+document.getElementById('Button').onclick = function() {
+    _Create_HTML_Question();
+};
+
+document.getElementById('update').onclick = function() {
+    _nextQuestion = document.getElementById('nextone').value;
+};
